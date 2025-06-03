@@ -1,45 +1,89 @@
 package;
 
-import h3d.scene.fwd.LightSystem;
-import h3d.scene.fwd.PointLight;
+import h3d.shader.pbr.BDRF;
+import h3d.shader.pbr.PropsTexture;
+import h3d.shader.NormalMap;
+import h2d.Font;
+import h3d.scene.pbr.Environment;
+import h3d.mat.PbrMaterialSetup;
+import hxd.Res;
 import h3d.Vector;
 import h3d.scene.Mesh;
 import h3d.prim.Cube;
+import h3d.prim.Sphere;
 import h3d.prim.Plane2D;
 
 class Main extends hxd.App {
 	var baseTarget:Vector = new Vector(0, 0, 1);
 
+	static function main() {
+		hxd.Res.initEmbed();
+		h3d.mat.MaterialSetup.current = new PbrMaterialSetup();
+		@:keep final app = new Main();
+	}
+
 	override function init() {
-		final floor = new Cube(10, 10, 1);
-		{
-			floor.addNormals();
-			floor.translate(-5, -5, -0.5);
+		super.init();
+		#if js
+		if (!engine.driver.hasFeature(ShaderModel3)) {
+			new h2d.Text(Res.font.DOTMATRIX.build(14), s2d).text = "WebGL 2.0 support required and not available on this browser.";
+			return;
 		}
-		final floor_m = new Mesh(floor, s3d);
-		{
-			floor_m.material.mainPass.enableLights = true;
-			floor_m.material.shadows = true;
-		}
-		cast(s3d.lightSystem, LightSystem).ambientLight.set(0, 0, 0.5);
-		cast(s3d.lightSystem, LightSystem).ambientLight.setColor(0xfff0f0);
+		#end
+		initSkybox();
+
+		var sun = new h3d.scene.pbr.PointLight(s3d);
+		sun.setPosition(0, 0, 40);
+		sun.range = 100;
+		sun.power = 10;
+
+		// var sp = new Sphere(1, 128, 128);
+		// sp.addNormals();
+		// sp.addUVs();
+		// var spm = new Mesh(sp, s3d);
+		// var mat = new h3d.shader.pbr.PropsValues(1.0, 0.5, 0.0);
+		// spm.material.mainPass.addShader(mat);
+
+		final floor_prim = new Cube(10, 10, 1);
+		floor_prim.addNormals();
+		floor_prim.addUVs();
+		floor_prim.translate(-5, -5, -0.5);
+
+		final floor = new Mesh(floor_prim, s3d);
+		final floor_shader = new h3d.shader.pbr.PropsValues(1.0, 0.5, 0.0);
+        floor.material.texture = Res.tex.carbonfiber.Color.toTexture();
+		final floor_pbr = new PropsTexture();
+		floor.material.mainPass.addShader(floor_shader);
 
 		s3d.camera.pos.set(0, 15, 6);
 		s3d.camera.target = baseTarget;
-		s3d.camera.zNear = 5;
-		s3d.camera.zFar = 40;
-        for (i in 0...20) {
-            var card = new Cube(0.63, 0.88, 0.01);
-            card.addNormals();
-            var card_m = new Mesh(card, s3d);
-			card_m.setPosition(Math.floor(Math.random() * 10)-5, Math.floor(Math.random() * 10)-5, 0.6);
-			card_m.setRotation(0, 0, Math.random() * Math.PI * 2);
-            card_m.material.color.setColor(0x0088ff);
-        }
 	}
 
-	static function main() {
-		@:keep final app = new Main();
+	private function initSkybox() {
+		var skybox = new Sphere(1, 128, 128);
+		skybox.addNormals();
+		skybox.addUVs();
+
+		var bg = new Mesh(skybox, s3d);
+		bg.scale(10);
+		bg.material.mainPass.culling = Front;
+		bg.material.mainPass.setPassName("overlay");
+
+		var envMap = new h3d.mat.Texture(1024, 1024, [Cube]);
+		envMap.setName("Skybox");
+
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_FRONT.getPixels(), 0, 0);
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_BACK.getPixels(), 0, 1);
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_RIGHT.getPixels(), 0, 2);
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_LEFT.getPixels(), 0, 3);
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_UP.getPixels(), 0, 4);
+		envMap.uploadPixels(Res.tex.skybox.common.jettelly_space_common_black_DOWN.getPixels(), 0, 5);
+
+		final env = new Environment(envMap);
+		env.compute();
+		var renderer = cast(s3d.renderer, h3d.scene.pbr.Renderer);
+		renderer.env = env;
+		bg.material.mainPass.addShader(new h3d.shader.pbr.CubeLod(env.env));
 	}
 
 	override function update(_delta:Float) {
