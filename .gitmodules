@@ -1,0 +1,3 @@
+[submodule ".haxelib/heaps/git"]
+	path = .haxelib/heaps/git
+	url = git@github.com:heapsIO/heaps
