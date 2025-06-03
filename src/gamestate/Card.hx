@@ -1,5 +1,8 @@
 package src.gamestate;
 
+import h3d.scene.Mesh;
+import h3d.prim.Cube;
+
 private typedef ManaCost = {
     mc:String,
     cmc:Int
@@ -32,7 +35,10 @@ typedef Tcard = {
     cnum:Null<Int>
 }
 
-class Card {
-    function new(card:Tcard) {
+class Card extends h3d.scene.Graphics {
+    final geo:Cube;
+    function new(parent:h3d.scene.Object, card:Tcard) {
+        super(parent);
+        geo = new h3d.prim.Cube(0.63, 0.88, 0.01);
     }
 }
