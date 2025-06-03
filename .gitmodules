@@ -4,3 +4,6 @@
 [submodule ".haxelib/format/git"]
 	path = .haxelib/format/git
 	url = git@github.com:haxefoundation/format
+[submodule ".haxelib/hashlink/git"]
+    path = .haxelib/hashlink/git
+    url = git@github.com:haxefoundation/hashlink
