@@ -1,9 +1,8 @@
 package;
 
-import h3d.shader.pbr.BDRF;
+import h3d.mat.Texture;
+import h3d.shader.SpecularTexture;
 import h3d.shader.pbr.PropsTexture;
-import h3d.shader.NormalMap;
-import h2d.Font;
 import h3d.scene.pbr.Environment;
 import h3d.mat.PbrMaterialSetup;
 import hxd.Res;
@@ -11,7 +10,6 @@ import h3d.Vector;
 import h3d.scene.Mesh;
 import h3d.prim.Cube;
 import h3d.prim.Sphere;
-import h3d.prim.Plane2D;
 
 class Main extends hxd.App {
 	var baseTarget:Vector = new Vector(0, 0, 1);
@@ -52,7 +50,6 @@ class Main extends hxd.App {
 		final floor = new Mesh(floor_prim, s3d);
 		final floor_shader = new h3d.shader.pbr.PropsValues(1.0, 0.5, 0.0);
         floor.material.texture = Res.tex.carbonfiber.Color.toTexture();
-		final floor_pbr = new PropsTexture();
 		floor.material.mainPass.addShader(floor_shader);
 
 		s3d.camera.pos.set(0, 15, 6);
