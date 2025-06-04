@@ -85,7 +85,6 @@ class Main extends hxd.App {
 		super.update(_delta);
         sunTS += _delta;
         sunTS %= 10;
-		sun.rotate(Math.PI / 8, 0, Math.PI / 8);
         sun.x = 3*Math.sin(2*Math.PI*(sunTS/10));
         sun.y = 3*Math.cos(2*Math.PI*(sunTS/10));
 		baseTarget = new Vector(0.6 * ((s2d.mouseX / s2d.width) - 0.5), 0.6 * ((s2d.mouseY / s2d.height) - 0.5), baseTarget.z);
