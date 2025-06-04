@@ -44,9 +44,10 @@ class Main extends hxd.App {
 		floor_prim.translate(-5, -5, -0.5);
 
 		final floor = new Mesh(floor_prim, s3d);
-		final floor_shader = new h3d.shader.pbr.PropsValues(1.0, 0.5, 0.0);
+		final floor_shader = new PropsTexture(Res.tex.carbonfiber.Composed.toTexture());
         floor.material.texture = Res.tex.carbonfiber.Color.toTexture();
 		floor.material.mainPass.addShader(floor_shader);
+        // floor.material.normalMap = Res.tex.carbonfiber.NormalDX.toTexture();
 
 		s3d.camera.pos.set(0, 15, 6);
 		s3d.camera.target = baseTarget;
