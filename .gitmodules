@@ -1,0 +1,9 @@
+[submodule ".haxelib/heaps/git"]
+	path = .haxelib/heaps/git
+	url = git@github.com:heapsIO/heaps
+[submodule ".haxelib/format/git"]
+	path = .haxelib/format/git
+	url = git@github.com:haxefoundation/format
+[submodule ".haxelib/hashlink/git"]
+    path = .haxelib/hashlink/git
+    url = git@github.com:haxefoundation/hashlink

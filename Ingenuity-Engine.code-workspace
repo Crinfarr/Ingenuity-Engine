@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+    ],
+    "settings": {
+        "liveServer.settings.ignoreFiles": [
+            ".vscode/**",
+            "*.hx"
+        ],
+        "liveServer.settings.root": "/bin/js"
+    }
+}
