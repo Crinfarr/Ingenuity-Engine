@@ -1,0 +1,1 @@
+[![Deploy](https://github.com/Crinfarr/Ingenuity-Engine/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/Crinfarr/Ingenuity-Engine/actions/workflows/deploy.yml)
