@@ -20,6 +20,7 @@ jobs:
         with:
             path: bin/js
   Publish-Page:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     needs: Build-Artifact
     permissions:
