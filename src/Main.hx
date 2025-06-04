@@ -34,9 +34,9 @@ class Main extends hxd.App {
 		initSkybox();
 
 		this.sun = new h3d.scene.pbr.PointLight(s3d);
-		sun.setPosition(0, 0, 5);
+		sun.setPosition(0, 0, 10);
 		sun.range = 100;
-		sun.power = 3;
+		sun.power = 7;
 
 		final floor_prim = new Cube(10, 10, 1);
 		floor_prim.addNormals();
@@ -47,6 +47,7 @@ class Main extends hxd.App {
 		final floor = new Mesh(floor_prim, s3d);
 		final floor_shader = new PropsTexture(Res.tex.carbonfiber.Composed.toTexture());
         floor.material.texture = Res.tex.carbonfiber.Color.toTexture();
+        floor.material.texture.filter = Linear;
 		floor.material.mainPass.addShader(floor_shader);
         floor.material.normalMap = Res.tex.carbonfiber.NormalGL.toTexture();
 
@@ -85,8 +86,8 @@ class Main extends hxd.App {
 		super.update(_delta);
         sunTS += _delta;
         sunTS %= 10;
-        sun.x = 3*Math.sin(2*Math.PI*(sunTS/10));
-        sun.y = 3*Math.cos(2*Math.PI*(sunTS/10));
+        sun.x = 5*Math.sin(2*Math.PI*(sunTS/10));
+        sun.y = 5*Math.cos(2*Math.PI*(sunTS/10));
 		baseTarget = new Vector(0.6 * ((s2d.mouseX / s2d.width) - 0.5), 0.6 * ((s2d.mouseY / s2d.height) - 0.5), baseTarget.z);
 		s3d.camera.target = baseTarget;
 	}
