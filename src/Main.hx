@@ -1,5 +1,6 @@
 package;
 
+import h3d.scene.pbr.PointLight;
 import h3d.mat.Texture;
 import h3d.shader.SpecularTexture;
 import h3d.shader.pbr.PropsTexture;
@@ -13,6 +14,8 @@ import h3d.prim.Sphere;
 
 class Main extends hxd.App {
 	var baseTarget:Vector = new Vector(0, 0, 1);
+    var sun:PointLight;
+    var sunTS:Float = 0.0;
 
 	static function main() {
 		hxd.Res.initEmbed();
@@ -30,17 +33,10 @@ class Main extends hxd.App {
 		#end
 		initSkybox();
 
-		var sun = new h3d.scene.pbr.PointLight(s3d);
-		sun.setPosition(0, 0, 40);
+		this.sun = new h3d.scene.pbr.PointLight(s3d);
+		sun.setPosition(0, 0, 5);
 		sun.range = 100;
-		sun.power = 10;
-
-		// var sp = new Sphere(1, 128, 128);
-		// sp.addNormals();
-		// sp.addUVs();
-		// var spm = new Mesh(sp, s3d);
-		// var mat = new h3d.shader.pbr.PropsValues(1.0, 0.5, 0.0);
-		// spm.material.mainPass.addShader(mat);
+		sun.power = 3;
 
 		final floor_prim = new Cube(10, 10, 1);
 		floor_prim.addNormals();
@@ -85,6 +81,11 @@ class Main extends hxd.App {
 
 	override function update(_delta:Float) {
 		super.update(_delta);
+        sunTS += _delta;
+        sunTS %= 10;
+		sun.rotate(Math.PI / 8, 0, Math.PI / 8);
+        sun.x = 3*Math.sin(2*Math.PI*(sunTS/10));
+        sun.y = 3*Math.cos(2*Math.PI*(sunTS/10));
 		baseTarget = new Vector(0.6 * ((s2d.mouseX / s2d.width) - 0.5), 0.6 * ((s2d.mouseY / s2d.height) - 0.5), baseTarget.z);
 		s3d.camera.target = baseTarget;
 	}
