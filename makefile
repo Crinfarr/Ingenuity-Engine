@@ -20,6 +20,9 @@ hl: FULL
 js: HXML_TARGET := js.hxml
 js: FULL
 
+clean:
+	rm bin/js/main.js bin/js/main.js.map
+
 FULL: src/Main.hx src/gamestate/*
 	haxe $(HXML_TARGET) $(HXML_EXTRAS)
 
