@@ -1,3 +1,4 @@
+#![feature(generic_const_exprs)]
 use std::env::VarError;
 
 use tracing::Level;
@@ -12,6 +13,8 @@ enum MainErr {
     DotEnvErr(#[from] dotenv::Error),
     #[error("Bad ENV for var {}: {:?}", .0, .1)]
     BadEnvErr(&'static str, std::ffi::OsString),
+    #[error("Unhandled error: {:?}", .0)]
+    Unhandled(#[from] Box<dyn std::error::Error>),
 }
 
 #[tokio::main]
