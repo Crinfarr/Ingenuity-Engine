@@ -1,19 +1,8 @@
-use std::collections::HashMap;
-
-use iroh::SecretKey;
-use tokio::sync::RwLock;
-use tracing::{debug, info, instrument};
-use uuid::Uuid;
-
 #[derive(Debug, thiserror::Error)]
-pub enum GameInitError {
-    #[error("Error binding socket: {}", .0)]
-    IrohBindError(#[from] iroh::endpoint::BindError),
-}
+pub enum GameInitError {}
 type GameInitResult<T> = Result<T, GameInitError>;
-
 pub struct Game<const N: usize> {
-    socket: iroh::Endpoint,
+    socket: Box<dyn ingenuity_engine_traits::IngenuitySocket<Error = Box<dyn std::error::Error>>>,
 }
 impl<const N: usize> Game<N> {
     //     #[instrument]

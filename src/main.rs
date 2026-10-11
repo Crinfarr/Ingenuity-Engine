@@ -1,6 +1,6 @@
 #![feature(generic_const_exprs)]
+use ingenuity_engine_traits;
 use std::env::VarError;
-
 use tracing::Level;
 
 mod game;

@@ -1,0 +1,11 @@
+[package]
+name = "ingenuity-engine-traits"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+# Internal dependencies
+# External dependencies
+tokio = { version = "1.53.2", features = ["sync"] }
+uuid = "1.28.0"
