@@ -3,8 +3,24 @@ name = "ingenuity-engine-traits"
 version = "0.1.0"
 edition = "2024"
 
+[features]
+default = []
+# if enabled, makes Packet derive Serialize and Deserialize
+serde = ["dep:serde"]
+serde_tag_internal = ["serde"]
+serde_tag_adjacent = ["serde"]
+serde_tag_none = ["serde"]
+# enables logins. Required for auth_jwt and auth_password
+auth = []
+# enables the JWTLogin packet
+auth_jwt = ["dep:jwt", "auth"]
+# enables the PasswordLogin packet
+auth_password = ["auth"]
+
 [dependencies]
-serde = { version = "1.0.229", features = ["derive"] }
+jwt = { version = "0.16.0", optional = true }
+mutually_exclusive_features = "0.1.0"
+serde = { version = "1.0.229", features = ["derive"], optional = true}
 # Internal dependencies
 # External dependencies
 tokio = { version = "1.53.2", features = ["sync"] }

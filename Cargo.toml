@@ -5,7 +5,10 @@ edition = "2024"
 
 [dependencies]
 # Internal dependencies
-ingenuity-engine-traits = {path = "ingenuity-engine-traits"}
+ingenuity-engine-traits = {path = "ingenuity-engine-traits", features = []}
+ingenuity-engine-macros = {path = "ingenuity-engine-macros"}
+# Socket options
+ingenuity-socket-tcp-raw = {path = "ingenuity-socket-tcp-raw"}
 # External dependencies
 dotenv = "0.15.0"
 thiserror = "2.0.21"

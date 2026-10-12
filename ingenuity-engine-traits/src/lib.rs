@@ -1,11 +1,20 @@
-use serde::{Deserialize, Serialize};
-
-#[derive(Serialize, Deserialize)]
-pub enum Packet {
-    Connect,
-    Disconnect,
-    ServerMessage(String),
-}
+// Feature safety checks
+#[cfg(any(all(
+    feature = "auth",
+    not(any(feature = "auth_password", feature = "auth_jwt"))
+)))]
+compile_error!("feature 'auth' requires at least one authentication module to be enabled");
+mutually_exclusive_features::none_or_one_of!(
+    "serde_tag_internal",
+    "serde_tag_adjacent",
+    "serde_tag_none"
+);
+use tokio::sync::mpsc::{UnboundedReceiver, UnboundedSender};
+use uuid::Uuid;
+mod client_message;
+pub use client_message::ClientMessage;
+mod server_message;
+pub use server_message::ServerMessage;
 
 /// The IngenuitySocket trait is used to implement a communications protocol between the Engine and an arbitrary client.
 /// The only functions that needs to be implemented are
@@ -21,15 +30,15 @@ pub trait IngenuitySocket {
     /// If there is no socket with the requested UUID, this should return Ok(None).
     fn get_channel(
         &self,
-        id: uuid::Uuid,
+        id: Uuid,
     ) -> Result<
         Option<(
-            &mut tokio::sync::mpsc::UnboundedReceiver<Packet>,
-            &tokio::sync::mpsc::Sender<Packet>,
+            &mut UnboundedReceiver<ClientMessage>,
+            &UnboundedSender<ServerMessage>,
         )>,
         Self::Error,
     >;
     /// This function will receive a function pointer, which the socket should call with the UUID of any newly established connections.
     /// If this function is called a second time, the first callback should be dropped.
-    fn set_callback(&self, callback: fn(uuid::Uuid)) -> ();
+    fn set_callback(&self, callback: fn(Uuid)) -> ();
 }

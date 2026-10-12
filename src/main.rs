@@ -1,5 +1,3 @@
-#![feature(generic_const_exprs)]
-use ingenuity_engine_traits;
 use std::env::VarError;
 use tracing::Level;
 
@@ -27,7 +25,10 @@ async fn main() -> Result<(), MainErr> {
             "INFO" => Level::INFO,
             "DEBUG" => Level::DEBUG,
             "TRACE" => Level::TRACE,
-            _other => Level::INFO,
+            other => {
+                eprintln!("Unknown loglevel {}, defaulting to INFO", other);
+                Level::INFO
+            }
         },
         // error handling
         Err(VarError::NotPresent) => Level::INFO,
